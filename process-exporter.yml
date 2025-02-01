@@ -1,0 +1,41 @@
+process_names:
+  - name: "{{.ExeBase}}"
+    exe:
+      - /usr/bin/supra-server-daemon
+  - name: "{{.ExeBase}}:{{.Matches.chromiumCmd}}"
+    exe:
+      - /usr/bin/supra-server-screen
+    cmdline:
+      - "/home/__USER__/\\.local/bin/(?P<chromiumCmd>\\S+)"
+  - name: "{{.ExeBase}}:{{.Matches.duid}}"
+    exe:
+      - "/usr/lib/chromium-browser/chromium-browser"
+      - "/home/__USER__/.local/bin/google-chrome1"
+      - "/home/__USER__/.local/bin/google-chrome2"
+      - "/home/__USER__/.local/bin/google-chrome3"
+      - "/home/__USER__/.local/bin/google-chrome4"
+      - "/home/__USER__/.local/bin/google-chrome5"
+      - "/home/__USER__/.local/bin/google-chrome6"
+      - "/home/__USER__/.local/bin/google-chrome7"
+      - "/home/__USER__/.local/bin/google-chrome8"
+      - "/home/__USER__/.local/bin/google-chrome9"
+      - "/home/__USER__/.local/bin/google-chrome-signageos1"
+      - "/home/__USER__/.local/bin/google-chrome-signageos2"
+      - "/home/__USER__/.local/bin/google-chrome-signageos3"
+      - "/home/__USER__/.local/bin/google-chrome-signageos4"
+      - "/home/__USER__/.local/bin/google-chrome-signageos5"
+      - "/home/__USER__/.local/bin/google-chrome-signageos6"
+      - "/home/__USER__/.local/bin/google-chrome-signageos7"
+      - "/home/__USER__/.local/bin/google-chrome-signageos8"
+      - "/home/__USER__/.local/bin/google-chrome-signageos9"
+      - "/home/__USER__/.local/bin/google-chrome-emu1"
+      - "/home/__USER__/.local/bin/google-chrome-emu2"
+      - "/home/__USER__/.local/bin/google-chrome-emu3"
+      - "/home/__USER__/.local/bin/google-chrome-emu4"
+      - "/home/__USER__/.local/bin/google-chrome-emu5"
+      - "/home/__USER__/.local/bin/google-chrome-emu6"
+      - "/home/__USER__/.local/bin/google-chrome-emu7"
+      - "/home/__USER__/.local/bin/google-chrome-emu8"
+      - "/home/__USER__/.local/bin/google-chrome-emu9"
+    cmdline:
+      - "index\\.html\\?duid=(?P<duid>[^\\&]+)"

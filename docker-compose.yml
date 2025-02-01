@@ -1,0 +1,71 @@
+networks:
+  default:
+
+
+services:
+  prometheus:
+    image: prom/prometheus
+    restart: unless-stopped
+    networks:
+      - default
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    volumes:
+      - $HOME/.config/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - /data/prometheus:/prometheus
+    ports:
+      - 9090:9090
+
+  node-exporter:
+    image: prom/node-exporter:latest
+    command:
+      - '--path.rootfs=/host'
+    network_mode: host
+    pid: host
+    restart: unless-stopped
+    volumes:
+      - '/:/host:ro,rslave'
+
+  process-exporter:
+    image: ncabatoff/process-exporter
+    networks:
+      default:
+        aliases:
+          - process_exporter
+    privileged: true
+    restart: unless-stopped
+    volumes:
+      - /proc:/host/proc:ro
+      - $HOME/.config/process-exporter.yml:/etc/process-exporter/process-exporter.yml:ro
+    command: --procfs /host/proc -config.path /etc/process-exporter/process-exporter.yml
+    ports:
+      - 9256:9256
+
+  grafana:
+    image: grafana/grafana-oss
+    networks:
+      - default
+    restart: unless-stopped
+    volumes:
+      - /data/grafana:/var/lib/grafana
+      - $HOME/.config/grafana.ini:/etc/grafana/grafana.ini:ro
+    ports:
+      - 3000:3000
+
+  telegraf:
+    image: telegraf
+    networks:
+      - default
+    privileged: true
+    restart: unless-stopped
+    volumes:
+      - $HOME/.config/telegraf.conf:/etc/telegraf/telegraf.conf:ro
+      - $HOME/.config/telegraf/intel_gpu_top.sh:/etc/telegraf/intel_gpu_top.sh
+      - /:/hostfs:ro
+    environment:
+      - HOST_ETC=/hostfs/etc
+      - HOST_PROC=/hostfs/proc
+      - HOST_SYS=/hostfs/sys
+      - HOST_VAR=/hostfs/var
+      - HOST_RUN=/hostfs/run
+      - HOST_MOUNT_PREFIX=/hostfs
