@@ -48,7 +48,7 @@ docker compose exec telegraf sh -c "apt update && apt install -y intel-gpu-tools
 sed -i "s/__USER__/$USER/g" $HOME/.config/process-exporter.yml
 
 # Let user paste grafana Admin token if not already provided
-if [ cat $HOME/.config/telegraf.conf | grep "__GRAFANA_API_KEY__" ]; then
+if grep -q "__GRAFANA_API_KEY__" "$HOME/.config/telegraf.conf"; then
 	echo "Please paste the Grafana Admin token for Telegraf (http://$LOCAL_IP_ADDRESS:3000/org/serviceaccounts/create)"
 	read -p "Grafana Admin token: " GRAFANA_ADMIN_TOKEN
 	# Replace __GRAFANA_API_KEY__ placeholder with the actual token in telegraf.conf
